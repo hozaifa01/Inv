@@ -59,7 +59,8 @@ $expiring_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة المخازن - المواد الغذائية</title>
+    <title><?php echo htmlspecialchars($site["title"], ENT_QUOTES, 'UTF-8');?> -
+    لوحة التحكم</title>
     <?php require_once "header.php";?>
 
 </head>
@@ -71,7 +72,7 @@ $expiring_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <!-- المحتوى الرئيسي -->
             <main class="col-md-9  main-content">
                 <div class="dashboard-header">
-                    <h1>لوحة تحكم نظام إدارة المخازن</h1>
+                    <h1>لوحة تحكم <?php echo htmlspecialchars($site["title"], ENT_QUOTES, 'UTF-8');?> </h1>
                     <p>مرحبًا بك في نظام إدارة مخازن المواد الغذائية</p>
                 </div>
 

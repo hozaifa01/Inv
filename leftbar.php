@@ -24,9 +24,9 @@ $photo =!empty($row['photo'])? htmlspecialchars($row['photo'], ENT_QUOTES, 'UTF-
 ?>
 <nav class="col-md-3 col-lg-2 d-md-block bg-custom">
     <div class="logo mb-4">
-        <i class="bi bi-shop"></i> نظام ادارة المخازن  
+        <i class="bi bi-shop"></i> <?php echo htmlspecialchars($site["title"], ENT_QUOTES, 'UTF-8');?>  
     </div>
-         <h6>نسخة بيتا 0.1</h6>
+         <h6><?php echo htmlspecialchars($site["description"], ENT_QUOTES, 'UTF-8');?> </h6>
     <?= "أهلاً وسهلاً <span style='color:red;'> ". htmlspecialchars($row['FullName'], ENT_QUOTES,
     'UTF-8') . " </span> طاب يومك يا"
     ?>

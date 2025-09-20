@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سياسة الخصوصية واتفاقية المستخدم - نظام إدارة المخازن</title>
+    <title><?php echo htmlspecialchars($site["title"], ENT_QUOTES, 'UTF-8');?> - سياسة الخصوصية واتفاقية  المستخدم  </title>
     <?php include_once("header.php");?>
     <!-- تأكد من تضمين Bootstrap Icons -->
     <style>

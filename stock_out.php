@@ -85,7 +85,8 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إذن صرف - نظام المخازن</title>
+    <title><?php echo htmlspecialchars($site["title"], ENT_QUOTES, 'UTF-8');?> -
+    إذن صرف</title>
     <?php include "header.php";?>
 </head>
 <body>

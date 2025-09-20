@@ -107,6 +107,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
 <head>
     <meta charset="UTF-8">
     <?php include('header.php');?>
+<title><?php echo htmlspecialchars($site["title"], ENT_QUOTES, 'UTF-8');?> -
+الملف الشخصي</title>
 </head>
 <body>
     <div class="container-fluid">

@@ -93,7 +93,8 @@ if (isset($_GET['edit_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة الأصناف - نظام المخازن</title>
+    <title><?php echo htmlspecialchars($site["title"], ENT_QUOTES, 'UTF-8');?> -
+    إدارة الأصناف</title>
     <?php include_once "header.php";?>
 </head>
 <body>
