@@ -203,6 +203,17 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </tr>
         <?php endforeach; ?>
     </tbody>
+      <tfoot>
+        <tr class="table-info fw-bold">
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+        </tr>
+    </tfoot>
 </table>
                                 </div>
                             </div>
@@ -213,10 +224,11 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-  <script>
+        <script>
         $('#stockInTable').DataTable({
         responsive: true,
         serverSide: false,
+        processing:true,
         lengthChange: true,
         select: {
             style: 'multi'
@@ -227,15 +239,16 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
         paging: true,
         info: true,
         fixedHeader: true,
-        stateSave: true, // يحفظ حالة الجدول (ترتيب، بحث، صفحة) عند إعادة التحميل
+        stateSave: true,
         pageLength: 10,
-        dom: 'Bfrtip', // تحكم في ترتيب عناصر DataTables (B=Buttons, f=filter, r=processing, t=table, i=information, p=pagination)
+  lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "الكل"] ],
+        dom: 'Bfrtip,<"buttom"l>rt<"bottom"ip><"clear">',
         buttons: [
             'copy',
             {
                 extend: 'excelHtml5',
                 text: 'Excel',
-                filename: 'Customer_Bookings_Excel',
+                filename: 'inventory_system_Excel',
                 exportOptions: {
                     columns: ':visible'
                 }
@@ -243,26 +256,19 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
             {
                 extend: 'pdfHtml5',
                 text: 'PDF',
-                filename: 'Customer_Bookings_PDF',
+                filename: 'inventory_system_PDF',
                 exportOptions: {
                     columns: ':visible'
                 },
-                // Custom PDF styling for RTL and Arabic font
                 customize: function (doc) {
-                    // For proper Arabic font support, ensure 'Amiri-Regular' (or another Arabic font)
-                    // is properly defined and loaded within pdfmake (usually via vfs_fonts.js)
-                    // This is a placeholder; actual implementation requires font embedding.
-                    doc.defaultStyle.font = 'Amiri-Regular'; 
+                    doc.defaultStyle.font = 'Amiri-Regular';
                     doc.defaultStyle.alignment = 'right';
                     doc.styles.tableHeader.alignment = 'right';
                     
-                    // Reverse column order for RTL in PDF, if header and body are handled together
                     if (doc.content[1] && doc.content[1].table) {
-                        // Reverse the headers
                         if (doc.content[1].table.body.length > 0) {
                             doc.content[1].table.body[0].reverse();
                         }
-                        // Reverse all data rows
                         for (let i = 1; i < doc.content[1].table.body.length; i++) {
                             doc.content[1].table.body[i].reverse();
                         }
@@ -273,6 +279,13 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
             'colvis'
         ],
         language: {
+            select: {
+    rows: {
+      _: "تم تحديد %d صف",
+      0: "لم يتم تحديد أي صف",
+      1: "تم تحديد صف واحد"
+}
+},
             search: 'بحث:',
             info: 'عرض _START_ إلى _END_ من _TOTAL_ صفحة',
             infoEmpty: 'لا توجد سجلات',
@@ -299,8 +312,72 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 print: 'طباعة',
                 colvis: 'عرض/إخفاء الأعمدة'
             }
-        }
+        },
+        // إضافة دالة الجمع هنا
+        footerCallback: function (row, data, start, end, display) {
+    var api = this.api();
+
+    // تحقق من أن الجدول يحتوي على بيانات
+    if (api.data().count() === 0) {
+        // امسح محتوى الفوتر أو ضع رسالة مخصصة
+        api.columns().every(function () {
+            $(api.column(this.index()).footer()).html('<strong>—</strong>');
+});
+        return; // أوقف التنفيذ
+}
+
+    var intVal = function (i) {
+        if (typeof i === 'string') {
+            return parseFloat(i.replace(/[^\d.-]/g, '')) || 0;
+} else if (typeof i === 'number') {
+            return i;
+}
+        return 0;
+};
+
+    var columnsToSum = [4,5];
+
+    columnsToSum.forEach(function (colIndex) {
+        var selectedRows = api.rows({ selected: true}).data();
+        var pageData = api.column(colIndex, { page: 'current'}).data();
+
+        var selectedTotal = 0;
+        if (selectedRows.length> 0) {
+            selectedRows.each(function (rowData) {
+                if (Array.isArray(rowData) && rowData.length> colIndex) {
+                    selectedTotal += intVal(rowData[colIndex]);
+}
+});
+}
+
+        var pageTotal = 0;
+        if (pageData.length> 0) {
+            pageData.each(function (val) {
+                pageTotal += intVal(val);
+});
+}
+
+        var formattedSelected = selectedTotal.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+});
+
+        var formattedPage = pageTotal.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+});
+
+        $(api.column(colIndex).footer()).html(
+            `<strong>المحدد: ${formattedSelected}   ج <br>الصفحة: ${formattedPage}  ج </strong>`
+);
+});
+}
     });
+var table = $('#stockInTable').DataTable();
+
+table.on('select deselect', function () {
+    table.draw(); 
+});
     </script>
 </body>
 </html>

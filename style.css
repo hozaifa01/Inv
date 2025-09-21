@@ -10,6 +10,7 @@
         body {
             background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+direction: rtl;
         }
         
         .sidebar {
@@ -104,4 +105,7 @@
         }
         *{
           margin: 0 0 0 0!important;
+        }
+        *{
+          direction: rtl!important;
         }

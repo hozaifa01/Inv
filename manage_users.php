@@ -16,11 +16,6 @@ $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 $stmt->close();
 
-if (!$user || (int)$user['level']!== 99) {
-    echo '<script>alert("عفوا، لا تملك صلاحيات كافية")</script>';
-    echo "<script>window.location.href='logout.php'</script>";
-    exit();
-}
 
 // تحديث بيانات المستخدم
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
@@ -162,6 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
             <div class="form-group">
                 <select class="form-control" id="level" name="level" required>
                     <option selected="" value="1">موظف استقبال</option>
+                    <option selected="" value="99">مدير </option>
                 </select>
             </div>
             <div class="form-group">
